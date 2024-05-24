@@ -67,7 +67,7 @@ public class WebSecurityConfig {
                         }
 
                         if (rol.equals("cliente") || rol.equals("gerente")) {
-                            response.sendRedirect("/reservas");
+                            response.sendRedirect("/mesas");
                         } else {
                             response.sendRedirect("/mesas");
                         }
