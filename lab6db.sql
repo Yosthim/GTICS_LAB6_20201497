@@ -11,28 +11,44 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema lab6db
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `lab6db` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `lab6db` DEFAULT CHARACTER SET utf8mb3 ;
 USE `lab6db` ;
 
 -- -----------------------------------------------------
--- Table `lab6db`.`Rol`
+-- Table `lab6db`.`mesas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `lab6db`.`Rol` (
+CREATE TABLE IF NOT EXISTS `lab6db`.`mesas` (
+  `idMesas` INT NOT NULL AUTO_INCREMENT,
+  `tipo` VARCHAR(45) NOT NULL,
+  `capacidad` INT NOT NULL,
+  `ubicacion` VARCHAR(45) NOT NULL,
+  `disponibilidad` INT NOT NULL,
+  `estado` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idMesas`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
+
+
+-- -----------------------------------------------------
+-- Table `lab6db`.`rol`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `lab6db`.`rol` (
   `idRol` VARCHAR(45) NOT NULL,
   `nombre` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idRol`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `lab6db`.`Usuarios`
+-- Table `lab6db`.`usuarios`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `lab6db`.`Usuarios` (
+CREATE TABLE IF NOT EXISTS `lab6db`.`usuarios` (
   `idUsuarios` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
   `apellido` VARCHAR(45) NOT NULL,
-  `correo` VARCHAR(45) NOT NULL,
-  `contraseña` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
   `estado` TINYINT NOT NULL,
   `idRol` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idUsuarios`),
@@ -40,31 +56,16 @@ CREATE TABLE IF NOT EXISTS `lab6db`.`Usuarios` (
   INDEX `fk_Usuarios_Rol_idx` (`idRol` ASC) VISIBLE,
   CONSTRAINT `fk_Usuarios_Rol`
     FOREIGN KEY (`idRol`)
-    REFERENCES `lab6db`.`Rol` (`idRol`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `lab6db`.`rol` (`idRol`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `lab6db`.`Mesas`
+-- Table `lab6db`.`reservas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `lab6db`.`Mesas` (
-  `idMesas` INT NOT NULL,
-  `tipo` VARCHAR(45) NOT NULL,
-  `capacidad` INT NOT NULL,
-  `Ubicación` VARCHAR(45) NOT NULL,
-  `disponibilidad` INT NOT NULL,
-  `estado` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idMesas`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `lab6db`.`Reservas`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `lab6db`.`Reservas` (
-  `idReservas` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `lab6db`.`reservas` (
+  `idReservas` INT NOT NULL AUTO_INCREMENT,
   `idUsuario` INT NOT NULL,
   `idMesa` INT NOT NULL,
   `fechaInicio` DATETIME NOT NULL,
@@ -72,17 +73,14 @@ CREATE TABLE IF NOT EXISTS `lab6db`.`Reservas` (
   PRIMARY KEY (`idReservas`),
   INDEX `fk_Reservas_Usuarios1_idx` (`idUsuario` ASC) VISIBLE,
   INDEX `fk_Reservas_Mesas1_idx` (`idMesa` ASC) VISIBLE,
-  CONSTRAINT `fk_Reservas_Usuarios1`
-    FOREIGN KEY (`idUsuario`)
-    REFERENCES `lab6db`.`Usuarios` (`idUsuarios`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `fk_Reservas_Mesas1`
     FOREIGN KEY (`idMesa`)
-    REFERENCES `lab6db`.`Mesas` (`idMesas`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `lab6db`.`mesas` (`idMesas`),
+  CONSTRAINT `fk_Reservas_Usuarios1`
+    FOREIGN KEY (`idUsuario`)
+    REFERENCES `lab6db`.`usuarios` (`idUsuarios`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
