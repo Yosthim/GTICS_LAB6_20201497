@@ -12,7 +12,7 @@ public class Usuarios {
     @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)
-    private String correo;
+    private String email;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
