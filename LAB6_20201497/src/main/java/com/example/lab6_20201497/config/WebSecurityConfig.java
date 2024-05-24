@@ -66,10 +66,10 @@ public class WebSecurityConfig {
                             break;
                         }
 
-                        if (rol.equals("admin")) {
-                            response.sendRedirect("/shipper");
+                        if (rol.equals("cliente") || rol.equals("gerente")) {
+                            response.sendRedirect("/reservas");
                         } else {
-                            response.sendRedirect("/employee");
+                            response.sendRedirect("/mesas");
                         }
                     }
                 });
